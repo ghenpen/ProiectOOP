@@ -1,10 +1,11 @@
 #include <iostream>
 #include <cstdlib>     /* srand, rand */
-#include <time.h>
+#include <ctime>
 #include <string>
+//#include <utility>
 #include <utility>
 #include <vector>
-#include <algorithm>
+//#include <algorithm>
 class item{
 protected:
     std::string name;
@@ -12,25 +13,25 @@ protected:
     int curency;
     std::string efect;
     int value;
-    bool bought;
+    [[maybe_unused]] bool bought;
 public:
     item(std::string n, int p, int c, std::string e, int v){
-        name = n;
+        name = std::move(n);
         price = p;
         curency = c;
-        efect = e;
+        efect = std::move(e);
         value = v;
         bought=false;
     }
     ~item() = default;
-    void getBought(bool b){
+    [[maybe_unused]] void getBought(bool b){
         bought = b;
-    }
+   }
 
-    void setBought(bool b){
+    [[maybe_unused]] void setBought(bool b){
         bought = b;
     }
-    int getPrice() const{
+    [[nodiscard]] int getPrice() const{
         return price;
     }
     //overload << operator
@@ -45,7 +46,7 @@ public:
     std::string getEfect(){
         return efect;
     }
-    int getValue() const{
+    [[nodiscard]] int getValue() const{
         return value;
     }
 
@@ -53,10 +54,10 @@ public:
 class pet{
 protected:
     std::string name;
-    int price;
-    int curency;
-    int damage;
-    bool bought;
+    int price{};
+    int curency{};
+    int damage{};
+    bool bought{};
 public:
     pet()=default;
     pet(std::string n, int p, int c, int d){
@@ -67,13 +68,15 @@ public:
         bought=false;
     }
     ~pet() = default;
-    int getDamage(int damage){
+
+    [[maybe_unused]] static int getDamage(int damage){
         return damage;
     }
-    int getPrice() const{
+    [[nodiscard]] int getPrice() const{
         return price;
     }
-    void getBought(bool b){
+
+    [[maybe_unused]] void getBought(bool b){
         bought = b;
     }
     //copy constructor
@@ -111,22 +114,26 @@ public:
     void setHealth(int h){
         health = h;
     }
-    void setDamage(int d){
+
+    [[maybe_unused]] void setDamage(int d){
         damage = d;
     }
-    void setNumberOfUnits(int n){
+
+    [[maybe_unused]] void setNumberOfUnits(int n){
         numberofunits = n;
     }
-    int getHealth() const{
+    [[nodiscard]] int getHealth() const{
         return health;
     }
-    int getDamage() const{
+    [[nodiscard]] int getDamage() const{
         return damage;
     }
-    int getNumberOfUnits() const{
+
+    [[maybe_unused]] [[nodiscard]] int getNumberOfUnits() const{
         return numberofunits;
     }
-    void defend(int damage){
+
+    [[maybe_unused]] void defend(int damage){
         this->setHealth(this->getHealth() - damage );
     }
     //overload << operator
@@ -163,19 +170,19 @@ class player{
         void setDefense(int de){
             defense = de;
         }
-        void addItem(item i){
+        void addItem(const item& i){
             items.push_back(i);
         }
-        void setpet(pet p){
+        void setpet(const pet& p){
             equippedpet = p;
         }
-        int getHealth() const{
+        [[nodiscard]] int getHealth() const{
             return health;
         }
-        int getAttack() const{
+        [[nodiscard]] int getAttack() const{
             return attack;
         }
-        int getDefense() const{
+        [[nodiscard]] int getDefense() const{
             return defense;
         }
         void combat(enemy e){
@@ -221,7 +228,7 @@ class portal{
                 operatie = -1;
         }
         ~portal() = default;
-        void take_action(player &p){
+        void take_action(player &p) const{
             if(operatie == 1){
                 p.setHealth(p.getHealth() + number);
             }
@@ -257,10 +264,10 @@ public:
     void setDiamonds(int d){
         diamonds = d;
     }
-    int getMoney() const{
+    [[nodiscard]] int getMoney() const{
         return money;
     }
-    int getDiamonds() const{
+    [[nodiscard]] int getDiamonds() const{
         return diamonds;
     }
     //overload << operator
@@ -278,12 +285,12 @@ protected:
     currency curency;
 public:
     shop() {
-        items.push_back(item("itemviata", 10, 1, "health", 10));
-        items.push_back(item("itematac", 20, 1, "attack", 20));
-        items.push_back(item("itemdefense", 30, 1, "defense", 30));
-        pets.push_back(pet("dog", 10, 0, 10));
-        pets.push_back(pet("cat", 10, 0, 10));
-        pets.push_back(pet("bird", 10, 0, 10));
+        items.emplace_back("itemviata", 10, 1, "health", 10);
+        items.emplace_back("itematac", 20, 1, "attack", 20);
+        items.emplace_back("itemdefense", 30, 1, "defense", 30);
+        pets.emplace_back("dog", 10, 0, 10);
+        pets.emplace_back("cat", 10, 0, 10);
+        pets.emplace_back("bird", 10, 0, 10);
     }
 
     //item(std::string n, int p, int c, std::string e, int v)
@@ -303,12 +310,12 @@ public:
         }
     }
 
-    void sellItem(int i, player &p) {
+    [[maybe_unused]] void sellItem(int i, player &p) {
         curency.setMoney(curency.getMoney() + items[i].getPrice());
         p.addItem(items[i]);
     }
 
-    void sellPet(int i, player &p) {
+    [[maybe_unused]] void sellPet(int i, player &p) {
         curency.setMoney(curency.getMoney() + pets[i].getPrice());
         p.setpet(pets[i]);
     }
@@ -316,11 +323,12 @@ public:
     void setMoney(int m) {
         curency.setMoney(m);
     }
-    void setDiamonds(int d) {
+
+    [[maybe_unused]] void setDiamonds(int d) {
         curency.setDiamonds(d);
     }
 
-    void addtocurentcy(int m, int d) {
+    [[maybe_unused]] void addtocurentcy(int m, int d) {
         curency.setMoney(curency.getMoney() + m);
         curency.setDiamonds(curency.getDiamonds() + d);
     }
@@ -343,6 +351,7 @@ public:
         for (int i = 0; i < s.pets.size(); i++) {
             os << s.pets[i] << std::endl;
         }
+        return os;
     }
 };
 int main() {
@@ -356,34 +365,56 @@ int main() {
     while(game)
     {
     //shop
+    bool leave = false;
     std::cout<<"Welcome to the shop."<<std::endl;
     std::cout<<s;
     std::cout<<"You have "<<s.getMoney()<<" money and "<<s.getDiamonds()<<" diamonds."<<std::endl;
     if(s.getMoney() > 0 || s.getDiamonds() > 0)
     {
-        std::cout<<"Do you want to buy something? (1/0)"<<std::endl;
-        int choice;
-        std::cin>>choice;
-        if(choice == 1){
-            std::cout<<"What do you want to buy? (item/pet)"<<std::endl;
-            std::string choice;
-            std::cin>>choice;
-            if(choice == "item"){
-                std::cout<<"Which item do you want to buy? (0/1/2)"<<std::endl;
-                int choice;
-                std::cin>>choice;
-                s.buyItem(choice, p);
-            }
-            else{
-                std::cout<<"Which pet do you want to buy? (0/1/2)"<<std::endl;
-                int choice;
-                std::cin>>choice;
-                s.buyPet(choice, p);
+        while(!leave) {
+            std::cout << "Do you want to buy something? (1/0)" << std::endl;
+            int choice;
+            std::cin >> choice;
+            if (choice == 1) {
+                std::cout << "What do you want to buy? (item/pet)" << std::endl;
+                std::string choicetobuy;
+                std::cin >> choicetobuy;
+                if (choicetobuy == "item") {
+                    std::cout << "Which item do you want to buy? (0/1/2)" << std::endl;
+                    int choiceitem;
+                    std::cin >> choiceitem;
+                    s.buyItem(choiceitem, p);
+                    p.applyItems();
+                    std::cout<<"Leave shop. (1/0)"<<std::endl;
+                    int choiceleave;
+                    std::cin>>choiceleave;
+                    if(choiceleave == 1)
+                    {
+                        leave = true;
+                    }
+                } else {
+                    std::cout << "Which pet do you want to buy? (0/1/2)" << std::endl;
+                    int choicepet;
+                    std::cin >> choicepet;
+                    s.buyPet(choicepet, p);
+                    std::cout<<"Leave shop. (1/0)"<<std::endl;
+                    int choicetoleave;
+                    std::cin>>choicetoleave;
+                    if(choicetoleave == 1)
+                    {
+                        leave = true;
+                    }
+                }
+            } else {
+                std::cout << "Start the game." << std::endl;
+                leave = true;
             }
         }
     }
     else{
         std::cout<<"You don't have enough money or diamonds."<<std::endl;
+        std::cout<<"Start the game."<<std::endl;
+    }
 
         int nrportals = 5;
         while(p.getHealth() > 0)
@@ -393,9 +424,9 @@ int main() {
                 std::cout<<"You've reached two portals. Choose one: "<<std::endl;
                 portal portal1,portal2;
                 std::cout<< portal1 << portal2;
-                int choice;
-                std::cin>>choice;
-                if(choice == 1)
+                int choiceportal;
+                std::cin>>choiceportal;
+                if(choiceportal == 1)
                     portal1.take_action(p);
                 else
                     portal2.take_action(p);
@@ -416,21 +447,21 @@ int main() {
             }
             else{
                 std::cout<<"You've won the game."<<std::endl;
+                win = true;
                 std::cout << "You've earned " << earnedMoney << " money." << std::endl;
                 std:: cout << "You have " << s.getMoney() << " money." << std::endl;
                 std::cout<<"Want to play again? (1/0)"<<std::endl;
                 int choicee;
                 std::cin>>choicee;
-                if(choicee == 1)
-                {
-                    win = true;
+                if(choicee != 1) {
+                    game = false;
                     break;
                 }
                 else
-                    game = false;
+                    break;
             }
         }
-        if(win == false)
+        if(!win)
         {
 
             std::cout<<"You've died."<<std::endl;
@@ -442,7 +473,7 @@ int main() {
             else
                 game = false;
         }
-    }
+
     }
     return 0;
 }
