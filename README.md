@@ -3,8 +3,8 @@
 ### Tema 0
 
 - [ ] Joc arcade
-- [ ] jocul implica un player care se lupta cu inamici si trece prin portale castigand viata prin acestea, de asemenea banuti la fiecare lupta castigata
-- De asemenea playerul poate intra in shop si cumpara iteme care ii vor imbunatati viata atacul etc. 
+- [ ] jocul implica un player care se lupta cu inamici si trece prin portale castigand viata prin acestea, de asemenea banuti la fiecare lupta castigata. 
+De asemenea playerul poate intra in shop si cumpara iteme care ii vor imbunatati viata atacul etc. 
 
 ## Tema 1
 

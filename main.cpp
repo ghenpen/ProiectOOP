@@ -397,7 +397,7 @@ int main() {
                     int choicepet;
                     std::cin >> choicepet;
                     s.buyPet(choicepet, p);
-                    std::cout<<"Leave shop. (1/0)"<<std::endl;
+                    std::cout<<"Leave shop.  (1/0)"<<std::endl;
                     int choicetoleave;
                     std::cin>>choicetoleave;
                     if(choicetoleave == 1)
