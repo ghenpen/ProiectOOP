@@ -15,14 +15,15 @@ protected:
     int value;
     [[maybe_unused]] bool bought;
 public:
-    item(std::string n, int p, int c, std::string e, int v){
+    item(std::string n, int p, int c, std::string e, int v) : name(std::move(n)), price(p), curency(c), efect(std::move(e)), value(v), bought(false) {}
+    /*item(std::string n, int p, int c, std::string e, int v){
         name = std::move(n);
         price = p;
         curency = c;
         efect = std::move(e);
         value = v;
         bought=false;
-    }
+    }*/
     ~item() = default;
     [[maybe_unused]] void getBought(bool b){
         bought = b;
