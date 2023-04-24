@@ -15,7 +15,7 @@ protected:
     int value;
     [[maybe_unused]] bool bought;
 public:
-    item(std::string n, int p, int c, std::string e, int v){
+    item(const std::string &n, int p, int c, std::string e, int v){
         name = n;
         price = p;
         curency = c;
