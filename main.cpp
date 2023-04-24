@@ -447,7 +447,7 @@ int main() {
                 std::cout << "You've earned " << earnedMoney << " money." << std::endl;
                 std:: cout << "You have " << s.getMoney() << " money." << std::endl;
                 std::cout<<"Want to play again? (1/0)"<<std::endl;
-                int choicee=1;
+                int choicee=0;
                 std::cin>>choicee;
                 if(choicee != 1) {
                     game = false;
