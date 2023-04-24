@@ -24,13 +24,13 @@ public:
         bought=false;
     }
     ~item() = default;
-    [[maybe_unused]] void getBought(bool b){
+    /*[[maybe_unused]] void getBought(bool b){
         bought = b;
-   }
+   }*/
 
-    [[maybe_unused]] void setBought(bool b){
+    /*[[maybe_unused]] void setBought(bool b){
         bought = b;
-    }
+    }*/
     [[nodiscard]] int getPrice() const{
         return price;
     }
@@ -115,13 +115,13 @@ public:
         health = h;
     }
 
-    [[maybe_unused]] void setDamage(int d){
+    /*[[maybe_unused]] void setDamage(int d){
         damage = d;
-    }
+    }*/
 
-    [[maybe_unused]] void setNumberOfUnits(int n){
+    /*[[maybe_unused]] void setNumberOfUnits(int n){
         numberofunits = n;
-    }
+    }*/
     [[nodiscard]] int getHealth() const{
         return health;
     }
@@ -129,13 +129,13 @@ public:
         return damage;
     }
 
-    [[maybe_unused]] [[nodiscard]] int getNumberOfUnits() const{
+   /* [[maybe_unused]] [[nodiscard]] int getNumberOfUnits() const{
         return numberofunits;
-    }
+    }*/
 
-    [[maybe_unused]] void defend(int damage){
+    /*[[maybe_unused]] void defend(int damage){
         this->setHealth(this->getHealth() - damage );
-    }
+    }*/
     //overload << operator
     friend std::ostream& operator<<(std::ostream& os, const enemy& e){
         os << "Enemy stats:" << std::endl;
@@ -310,28 +310,28 @@ public:
         }
     }
 
-    [[maybe_unused]] void sellItem(int i, player &p) {
+    /*[[maybe_unused]] void sellItem(int i, player &p) {
         curency.setMoney(curency.getMoney() + items[i].getPrice());
         p.addItem(items[i]);
-    }
+    }*/
 
-    [[maybe_unused]] void sellPet(int i, player &p) {
+    /*[[maybe_unused]] void sellPet(int i, player &p) {
         curency.setMoney(curency.getMoney() + pets[i].getPrice());
         p.setpet(pets[i]);
-    }
+    }*/
 
     void setMoney(int m) {
         curency.setMoney(m);
     }
 
-    [[maybe_unused]] void setDiamonds(int d) {
+    /*[[maybe_unused]] void setDiamonds(int d) {
         curency.setDiamonds(d);
-    }
+    }*/
 
-    [[maybe_unused]] void addtocurentcy(int m, int d) {
+    /*[[maybe_unused]] void addtocurentcy(int m, int d) {
         curency.setMoney(curency.getMoney() + m);
         curency.setDiamonds(curency.getDiamonds() + d);
-    }
+    }*/
 
     int getMoney() {
         return curency.getMoney();
