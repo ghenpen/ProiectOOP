@@ -184,9 +184,6 @@ class player{
         }
         void combat(enemy e){
             int damage = e.getDamage() - this->getDefense();
-            if(damage < 0){
-                damage = 0;
-            }
             int turns1 = this->getHealth() / damage;
             int turns2 = e.getHealth() / this->getAttack();
             this->health -= std::min(turns1, turns2) * damage;
@@ -438,6 +435,8 @@ int main() {
                     std::cout << "You've earned " << earnedMoney << " money." << std::endl;
                     std:: cout << "You have " << s.getMoney() << " money." << std::endl;
                 }
+                else
+                    win = false;
                 std::cout<< p;
                 nrportals--;
 
