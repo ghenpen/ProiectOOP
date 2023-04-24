@@ -255,9 +255,9 @@ public:
     void setMoney(int m){
         money = m;
     }
-    void setDiamonds(int d){
+    /*void setDiamonds(int d){
         diamonds = d;
-    }
+    }*/
     [[nodiscard]] int getMoney() const{
         return money;
     }
