@@ -13,13 +13,13 @@ protected:
     int curency;
     std::string efect;
     int value;
-    [[maybe_unused]] bool bought;
+    /*bool bought;*/
 public:
     item(const std::string &n, int p, int c, const std::string &e, int v) : name(n), efect(e){
         price = p;
         curency = c;
         value = v;
-        bought=false;
+        //bought=false;
     }
     ~item() = default;
     /*[[maybe_unused]] void getBought(bool b){
