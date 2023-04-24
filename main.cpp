@@ -66,16 +66,16 @@ public:
     }
     ~pet() = default;
 
-    [[maybe_unused]] static int getDamage(int damage){
+    /*[[maybe_unused]] static int getDamage(int damage){
         return damage;
-    }
+    }*/
     [[nodiscard]] int getPrice() const{
         return price;
     }
 
-    [[maybe_unused]] void getBought(bool b){
+    /*[[maybe_unused]] void getBought(bool b){
         bought = b;
-    }
+    }*/
     //copy constructor
     pet(const pet& p):name(p.name), price(p.price), curency(p.curency), damage(p.damage), bought(p.bought){}
     //overload = operator
