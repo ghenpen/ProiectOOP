@@ -16,10 +16,10 @@ protected:
     [[maybe_unused]] bool bought;
 public:
     item(std::string n, int p, int c, std::string e, int v){
-        name = std::move(n);
+        name = n;
         price = p;
         curency = c;
-        efect = std::move(e);
+        efect = e;
         value = v;
         bought=false;
     }
