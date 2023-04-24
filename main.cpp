@@ -338,7 +338,7 @@ public:
     //overload << operator
     friend std::ostream &operator<<(std::ostream &os, const shop &s) {
         os << "Items: " << std::endl;
-        for (int i = 0; i < s.items.size(); i++) {
+        for (int i = 0; i < (int)s.items.size(); i++) {
             os << s.items[i] << std::endl;
         }
         os << "Pets: " << std::endl;
