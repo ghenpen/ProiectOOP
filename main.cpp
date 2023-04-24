@@ -189,7 +189,7 @@ class player{
             this->health -= std::min(turns1, turns2) * damage;
         }
         void applyItems(){
-            for(int i=0; i<items.size(); i++){
+            for(int i=0; i<(int)items.size(); i++){
                 if(items[i].getEfect() == "health"){
                     this->setHealth(this->getHealth() + items[i].getValue());
                 }
@@ -342,7 +342,7 @@ public:
             os << s.items[i] << std::endl;
         }
         os << "Pets: " << std::endl;
-        for (int i = 0; i < s.pets.size(); i++) {
+        for (int i = 0; i < (int)s.pets.size(); i++) {
             os << s.pets[i] << std::endl;
         }
         return os;
