@@ -362,12 +362,12 @@ int main() {
     while(game)
     {
     //shop
-    bool leave = false;
     std::cout<<"Welcome to the shop."<<std::endl;
     std::cout<<s;
     std::cout<<"You have "<<s.getMoney()<<" money and "<<s.getDiamonds()<<" diamonds."<<std::endl;
     if(s.getMoney() > 0 || s.getDiamonds() > 0)
     {
+        bool leave = false;
         while(!leave) {
             std::cout << "Do you want to buy something? (1/0)" << std::endl;
             int choice;
