@@ -462,7 +462,7 @@ int main() {
 
             std::cout<<"You've died."<<std::endl;
             std::cout<<"Want to play again? (1/0)"<<std::endl;
-            int choicee;
+            int choicee=0;
             std::cin>>choicee;
             if(choicee == 1)
                 game = true;
