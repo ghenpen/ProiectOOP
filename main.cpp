@@ -418,7 +418,7 @@ int main() {
                 std::cout<<"You've reached two portals. Choose one: "<<std::endl;
                 portal portal1,portal2;
                 std::cout<< portal1 << portal2;
-                int choiceportal;
+                int choiceportal=1;
                 std::cin>>choiceportal;
                 if(choiceportal == 1)
                     portal1.take_action(p);
