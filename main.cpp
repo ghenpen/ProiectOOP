@@ -58,8 +58,7 @@ protected:
     bool bought{};
 public:
     pet()=default;
-    pet(std::string n, int p, int c, int d){
-        name = n;
+    pet(const std::string &n, int p, int c, int d): name(n){
         price = p;
         curency = c;
         damage = d;
