@@ -116,10 +116,14 @@ public:
     //item(std::string n, int p, int c, std::string e, int v)
     ~shop() = default;
 
-    void buyItem(int i, player &p) {
-        if (curency.getMoney() >= items[i].getPrice()) {
-            curency.setMoney(curency.getMoney() - items[i].getPrice());
-            p.addItem(items[i]);
+
+    void buyItem(int i, player &p, OwnedStuff& os)
+    {
+        if (curency.getMoney() >= items[i].get()->getPrice())
+        {
+            curency.setMoney(curency.getMoney() - items[i].get()->getPrice());
+            os.add_item(items[i]);
+            items.erase(items.begin()+i);
         }
     }
 
