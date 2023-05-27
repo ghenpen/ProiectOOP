@@ -1,8 +1,6 @@
 #include <iostream>
-#include <cstdlib>     /* srand, rand */
 #include <ctime>
 #include <string>
-//#include <utility>
 #include <utility>
 #include <vector>
 #include <memory>
@@ -32,38 +30,6 @@ public:
         update_status = owned_items.size() - 1;
     }
 };
-class portal{
-    protected:
-        int number;
-        int operatie;
-    public:
-        portal(){
-           number= rand() % 100 + 1;
-           operatie = rand() %2;
-           if(operatie == 0)
-                operatie = -1;
-        }
-        ~portal() = default;
-        void take_action(player &p) const{
-            if(operatie == 1){
-                p.setHealth(p.getHealth() + number);
-            }
-            else{
-                p.setHealth(p.getHealth() - number);
-            }
-        }
-        //overload << operator
-        friend std::ostream& operator<<(std::ostream& os, const portal& p){
-            if(p.operatie == 1)
-               os << "+";
-            else
-                os << "-";
-            os<<p.number<<std::endl;
-            return os;
-        }
-
-};
-
 class currency{
 protected:
     int money;
@@ -93,8 +59,8 @@ public:
         return os;
     }
 };
-
-class shop {
+int OwnedStuff::update_status;
+class shop{
 protected:
     std::vector<std::shared_ptr<item>> items;
     std::vector<pet> pets;
@@ -121,6 +87,7 @@ public:
             curency.setMoney(curency.getMoney() - items[i].getPrice());
             p.addItem(items[i]);
         }
+        os.update(p);
     }
 
     void buyPet(int i, player &p) {
@@ -153,9 +120,9 @@ public:
 
     //overload << operator
     friend std::ostream &operator<<(std::ostream &os, const shop &s) {
-        os << "Items: " << std::endl;
-        for (int i = 0; i < (int)s.items.size(); i++) {
-            os << s.items[i] << std::endl;
+        os << "Items: " << s.items.size() << std::endl;
+        for (int i = 0; i < (int)s.items.size(); i++){
+            os << *(s.items[i].get()) << std::endl;
         }
         os << "Pets: " << std::endl;
         for (int i = 0; i < (int)s.pets.size(); i++) {
@@ -168,6 +135,7 @@ public:
 int main() {
     srand(time(NULL));
     player p(50, 5,0);
+    OwnedStuff os;
     int enemies = 1;
     int earnedMoney = 5;
     bool game = true;
@@ -239,50 +207,57 @@ int main() {
     }
 
         int nrportals = 5;
-        while(p.getHealth() > 0)
-        {
-            if(nrportals != 0)
-            {
-                std::cout<<"You've reached two portals. Choose one: "<<std::endl;
-                portal portal1,portal2;
-                std::cout<< portal1 << portal2;
-                int choiceportal=1;
-                std::cin>>choiceportal;
-                if(choiceportal == 1)
-                    portal1.take_action(p);
-                else
-                    portal2.take_action(p);
-                std::cout<<p;
-                enemy e(10, 2, enemies);
-                enemies = enemies *2;
-                std::cout<<"You've reached an enemy."<<std::endl;
-                p.combat(e);
-                if (p.getHealth() > 0) {
-                    std::cout << "You've won the fight." << std::endl;
-                    s.setMoney(s.getMoney() + earnedMoney);
-                    std::cout << "You've earned " << earnedMoney << " money." << std::endl;
-                    std:: cout << "You have " << s.getMoney() << " money." << std::endl;
-                }
-                else
-                    win = false;
-                std::cout<< p;
-                nrportals--;
+        while(p.getHealth() > 0) {
+            try {
+                if (nrportals != 0) {
+                    std::cout << "You've reached two portals. Choose one: " << std::endl;
+                    portal portal1, portal2;
+                    std::cout << portal1 << portal2;
+                    int choiceportal = 1;
+                    std::cin >> choiceportal;
+                    if (choiceportal == 1)
+                        portal1.take_action(p);
+                    else
+                        portal2.take_action(p);
+                    std::cout << p;
+                    enemy e(10, 2, enemies);
+                    enemies = enemies * 2;
+                    std::cout << "You've reached an enemy." << std::endl;
+                    try {
+                        p.combat(e);
+                    }
+                    catch (Error &e) {
+                        std::cout << e.what() << '\n';
+                    }
+                    if (p.getHealth() > 0) {
+                        std::cout << "You've won the fight." << std::endl;
+                        s.setMoney(s.getMoney() + earnedMoney);
+                        std::cout << "You've earned " << earnedMoney << " money." << std::endl;
+                        std::cout << "You have " << s.getMoney() << " money." << std::endl;
+                    } else
+                        win = false;
+                    std::cout << p;
+                    nrportals--;
 
-            }
-            else{
-                std::cout<<"You've won the game."<<std::endl;
-                win = true;
-                std::cout << "You've earned " << earnedMoney << " money." << std::endl;
-                std:: cout << "You have " << s.getMoney() << " money." << std::endl;
-                std::cout<<"Want to play again? (1/0)"<<std::endl;
-                int choicee=0;
-                std::cin>>choicee;
-                if(choicee != 1) {
-                    game = false;
-                    break;
+                } else {
+                    std::cout << "You've won the game." << std::endl;
+                    win = true;
+                    std::cout << "You've earned " << earnedMoney << " money." << std::endl;
+                    std::cout << "You have " << s.getMoney() << " money." << std::endl;
+                    std::cout << "Want to play again? (1/0)" << std::endl;
+                    int choicee = 0;
+                    if(choicee != 1 && choicee != 0) throw InputError("Player input incorrect");
+                    std::cin >> choicee;
+                    if (choicee != 1) {
+                        game = false;
+                        break;
+                    } else
+                        break;
                 }
-                else
-                    break;
+            }
+            catch(Error &e)
+            {
+                std::cout<<e.what()<<'\n';
             }
         }
         if(!win)
