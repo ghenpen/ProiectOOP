@@ -80,7 +80,8 @@ endfunction()
 ###############################################################################
 
 # NOTE: update executable name in .github/workflows/cmake.yml:25 when changing name here
-add_executable(${PROJECT_NAME} main.cpp)
+
+add_executable(${PROJECT_NAME} main.cpp enemies.cpp)
 
 ###############################################################################
 
