@@ -66,13 +66,13 @@ public:
 class item_factory
 {
 public:
-    static std::shared_ptr<item>  attack_item_(const std::string name, int pret, int buff_)
+    static std::shared_ptr<item>  attack_item_(const std::string &name, int pret, int buff_)
     { return std::shared_ptr<item>(std::make_shared<AttackItems>(AttackItems(name,pret,1,buff_))); }
-    static std::shared_ptr<item>  defence_item_(const std::string name, int pret, double buff_)
+    static std::shared_ptr<item>  defence_item_(const std::string &name, int pret, double buff_)
     { return std::shared_ptr<item>(std::make_shared<DefenceItems>(DefenceItems(name,pret,1,buff_))); }
-    static std::shared_ptr<item>  health_item_(const std::string name, int pret, int buff_)
+    static std::shared_ptr<item>  health_item_(const std::string &name, int pret, int buff_)
     { return std::shared_ptr<item>(std::make_shared<HealthItems>(HealthItems(name,pret,1,buff_))); }
-    static std::shared_ptr<item>  Special_item_(const std::string name, int pret, const std::string power)
+    static std::shared_ptr<item>  Special_item_(const std::string &name, int pret, const std::string &power)
     { return std::shared_ptr<item>(std::make_shared<SpecialItems>(SpecialItems(name,pret,2,power))); }
 };
 
