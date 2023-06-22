@@ -1,5 +1,4 @@
 #pragma once
-#include "pet.h"
 #include "exceptii.h"
 #include "enemies.h"
 class player{
@@ -7,7 +6,6 @@ protected:
     int health;
     int attack;
     int defense;
-    pet equippedpet;
 public:
     player(int h, int a, int de){
         health = h;
@@ -23,9 +21,6 @@ public:
     }
     void setDefense(int de){
         defense = de;
-    }
-    void setpet(const pet& p){
-        equippedpet = p;
     }
     [[nodiscard]] int getHealth() const{
         return health;

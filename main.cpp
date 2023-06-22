@@ -8,13 +8,13 @@
 #include <memory>
 #include "items.h"
 #include "portal.h"
+#include "singleton.h"
 
-
-class OwnedStuff
+class OwnedStuff : public Singleton<OwnedStuff>
 {
 protected:
     std::vector<item*> owned_items;
-    static int update_status;
+    int update_status;
 public:
     OwnedStuff()
     {
@@ -32,39 +32,8 @@ public:
         update_status = owned_items.size() - 1;
     }
 };
-class portal{
-    protected:
-        int number;
-        int operatie;
-    public:
-        portal(){
-           number= rand() % 100 + 1;
-           operatie = rand() %2;
-           if(operatie == 0)
-                operatie = -1;
-        }
-        ~portal() = default;
-        void take_action(player &p) const{
-            if(operatie == 1){
-                p.setHealth(p.getHealth() + number);
-            }
-            else{
-                p.setHealth(p.getHealth() - number);
-            }
-        }
-        //overload << operator
-        friend std::ostream& operator<<(std::ostream& os, const portal& p){
-            if(p.operatie == 1)
-               os << "+";
-            else
-                os << "-";
-            os<<p.number<<std::endl;
-            return os;
-        }
 
-};
-
-class currency{
+class currency {
 protected:
     int money;
     int diamonds;
@@ -77,9 +46,9 @@ public:
     void setMoney(int m){
         money = m;
     }
-    /*void setDiamonds(int d){
+    void setDiamonds(int d){
         diamonds = d;
-    }*/
+    }
     [[nodiscard]] int getMoney() const{
         return money;
     }
@@ -94,59 +63,70 @@ public:
     }
 };
 
-class shop {
+class item_factory
+{
+public:
+    static std::shared_ptr<item>  attack_item_(std::string name, int pret, int buff_)
+    { return std::shared_ptr<item>(std::make_shared<AttackItems>(AttackItems(name,pret,1,buff_))); }
+    static std::shared_ptr<item>  defence_item_(std::string name, int pret, double buff_)
+    { return std::shared_ptr<item>(std::make_shared<DefenceItems>(DefenceItems(name,pret,1,buff_))); }
+    static std::shared_ptr<item>  health_item_(std::string name, int pret, int buff_)
+    { return std::shared_ptr<item>(std::make_shared<HealthItems>(HealthItems(name,pret,1,buff_))); }
+    static std::shared_ptr<item>  Special_item_(std::string name, int pret, std::string power)
+    { return std::shared_ptr<item>(std::make_shared<SpecialItems>(SpecialItems(name,pret,2,power))); }
+};
+
+
+
+
+class shop : public Singleton<shop>{
 protected:
     std::vector<std::shared_ptr<item>> items;
-    std::vector<pet> pets;
     currency curency;
 public:
 
-    shop() {
+    shop()
+    {
         std::shared_ptr<item> temp;
-        temp = std::shared_ptr<item>(std::make_shared<AttackItems>(AttackItems("Sabie",10,1,15)));
+       // temp = std::shared_ptr<item>(std::make_shared<AttackItems>(AttackItems("Sabie",10,1,15)));
+        temp = item_factory::attack_item_("Sabie",10,15);
         items.push_back(temp);
         std::shared_ptr<item> a;
-        a = std::shared_ptr<item>(std::make_shared<DefenceItems>(DefenceItems("Scut",20,1,10)));
+        a = item_factory::defence_item_("Scut",10,10.0);
+        //a = std::shared_ptr<item>(std::make_shared<DefenceItems>(DefenceItems("Scut",20,1,10)));
         items.push_back(a);
         std::shared_ptr<item> b;
-        b = std::shared_ptr<item>(std::make_shared<HealthItems>(HealthItems("Potiune",10,1,20)));
+        b = item_factory::health_item_("Potiune", 10, 20);
+       // b = std::shared_ptr<item>(std::make_shared<HealthItems>(HealthItems("Potiune",10,1,20)));
         items.push_back(b);
+
+        items.push_back(item_factory::Special_item_("Trinity Force",3,"Trinity"));
+        items.push_back(item_factory::Special_item_("Goliath's Ascend",4,"Ascension"));
     }
+
 
     //item(std::string n, int p, int c, std::string e, int v)
     ~shop() = default;
 
 
-    void buyItem(int i, player &p, OwnedStuff& os)
-    {
-        if (curency.getMoney() >= items[i].get()->getPrice())
-        {
+    void buyItem(int i, OwnedStuff& os) {
+        if (curency.getMoney() >= items[i].get()->getPrice()) {
             curency.setMoney(curency.getMoney() - items[i].get()->getPrice());
             os.add_item(items[i]);
-            items.erase(items.begin()+i);
-        }
-    }
-
-    void buyPet(int i, player &p) {
-        if (curency.getDiamonds() >= pets[i].getPrice()) {
-            curency.setMoney(curency.getDiamonds() - pets[i].getPrice());
-            p.setpet(pets[i]);
+            items.erase(items.begin() + i);
         }
     }
 
     void setMoney(int m) {
         curency.setMoney(m);
     }
-
-    /*[[maybe_unused]] void setDiamonds(int d) {
+    void setDiamonds(int d) {
         curency.setDiamonds(d);
-    }*/
-
+    }
     /*[[maybe_unused]] void addtocurentcy(int m, int d) {
         curency.setMoney(curency.getMoney() + m);
         curency.setDiamonds(curency.getDiamonds() + d);
     }*/
-
     int getMoney() {
         return curency.getMoney();
     }
@@ -159,17 +139,15 @@ public:
     friend std::ostream &operator<<(std::ostream &os, const shop &s) {
         os << "Items: " << std::endl;
         for (int i = 0; i < (int)s.items.size(); i++) {
-            os << s.items[i] << std::endl;
-        }
-        os << "Pets: " << std::endl;
-        for (int i = 0; i < (int)s.pets.size(); i++) {
-            os << s.pets[i] << std::endl;
+            os << (*s.items[i].get()) << std::endl;
+            os << '\n';
         }
         return os;
     }
 };
 
 int main() {
+    OwnedStuff os;
     srand(time(NULL));
     player p(50, 5,0);
     int enemies = 1;
@@ -193,16 +171,16 @@ int main() {
                 std::cin >> choice;
                if(choice != 1 && choice != 0) throw InputError("Player input incorrect");
                 if (choice == 1) {
-                    std::cout << "What do you want to buy? (item/pet)" << std::endl;
+                    std::cout << "What do you want to buy? (item)" << std::endl;
                     std::string choicetobuy;
                     std::cin >> choicetobuy;
-                    if(choicetobuy != "item" && choicetobuy != "pet") throw InputError("Player input incorrect");
+                    if(choicetobuy != "item" ) throw InputError("Player input incorrect");
                     if (choicetobuy == "item") {
                      std::cout << "Which item do you want to buy? (0/1/2)" << std::endl;
                         int choiceitem;
                         if(choiceitem != 1 && choiceitem != 0 && choiceitem != 2) throw InputError("Player input incorrect");
                      std::cin >> choiceitem;
-                        s.buyItem(choiceitem, p, os);
+                        s.buyItem(choiceitem, os);
                         std::cout<<"Leave shop. (1/0)"<<std::endl;
                      int choiceleave;
                      std::cin>>choiceleave;
@@ -211,20 +189,6 @@ int main() {
                         {
                          leave = true;
                      }
-                    } else {
-                        std::cout << "Which pet do you want to buy? (0/1/2)" << std::endl;
-                     int choicepet;
-                        if(choicepet != 1 && choicepet != 0 && choicepet != 2) throw InputError("Player input incorrect");
-                     std::cin >> choicepet;
-                     s.buyPet(choicepet, p);
-                     std::cout<<"Leave shop.  (1/0)"<<std::endl;
-                     int choicetoleave;
-                        if(choicetoleave != 1 && choicetoleave != 0) throw InputError("Player input incorrect");
-                     std::cin>>choicetoleave;
-                        if(choicetoleave == 1)
-                        {
-                          leave = true;
-                        }
                     }
                 } else {
                     std::cout << "Start the game." << std::endl;

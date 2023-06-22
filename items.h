@@ -83,3 +83,49 @@ public:
     }
 
 };
+
+class SpecialItems : public item
+{
+protected:
+    std::string special_power;
+public:
+    SpecialItems(const std::string &n, int p, int c, const std::string &special_power_) : item(n,p,c), special_power(special_power_)
+    {
+
+    }
+    virtual void applyEffect(player& Player) override
+    {
+        if(special_power == "Trinity")
+        {
+            Player.setHealth(Player.getHealth()+33.3f/100.0f*Player.getHealth());
+            Player.setAttack(Player.getAttack()+33.3f/100.0f*Player.getAttack());
+            Player.setDefense(Player.getDefense()+33.3f/100.0f*Player.getHealth());
+        }
+        else if(special_power == "Ascension")
+        {
+            int p = rand() % 3 + 1;
+            switch (p)
+            {
+                case 1:
+                {
+                    Player.setHealth(Player.getHealth() * 2);
+                    break;
+                }
+                case 2:
+                {
+                    Player.setAttack(Player.getAttack() * 2);
+                    break;
+                }
+                default:
+                {
+                    Player.setDefense(Player.getDefense() * 2);
+                }
+            }
+        }
+    }
+    virtual item* clone() const
+    {
+        return new SpecialItems(*this);
+    }
+
+};
