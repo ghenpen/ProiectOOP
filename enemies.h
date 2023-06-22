@@ -20,7 +20,7 @@ public:
     }
 };
 
-
+/*
 class boss: public enemy{
 protected:
     int ability;
@@ -50,3 +50,4 @@ public:
         return os;
     }
 };
+ */

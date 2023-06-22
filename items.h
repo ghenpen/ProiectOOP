@@ -12,7 +12,7 @@ public:
         curency = c;
     }
     virtual ~item() = default;
-    int getPrice() const {
+    [[nodiscard]] int getPrice() const {
         return price;
     }
 
@@ -41,7 +41,7 @@ public:
     {
         Player.setDefense(Player.getDefense()+proc_buff/100.0f*Player.getHealth());
     }
-    virtual item* clone() const
+    virtual item* clone() const override
     {
         return new DefenceItems(*this);
     }
@@ -59,7 +59,7 @@ public:
     {
         Player.setAttack(Player.getAttack()+buff_value);
     }
-    virtual item* clone() const
+    virtual item* clone() const override
     {
         return new AttackItems(*this);
     }
@@ -77,7 +77,7 @@ public:
     {
         Player.setHealth(Player.getHealth()+proc_buff/100.0f*Player.getHealth());
     }
-    virtual item* clone() const
+    virtual item* clone() const override
     {
         return new HealthItems(*this);
     }
@@ -123,7 +123,7 @@ public:
             }
         }
     }
-    virtual item* clone() const
+    virtual item* clone() const override
     {
         return new SpecialItems(*this);
     }

@@ -66,13 +66,13 @@ public:
 class item_factory
 {
 public:
-    static std::shared_ptr<item>  attack_item_(std::string name, int pret, int buff_)
+    static std::shared_ptr<item>  attack_item_(const std::string name, int pret, int buff_)
     { return std::shared_ptr<item>(std::make_shared<AttackItems>(AttackItems(name,pret,1,buff_))); }
-    static std::shared_ptr<item>  defence_item_(std::string name, int pret, double buff_)
+    static std::shared_ptr<item>  defence_item_(const std::string name, int pret, double buff_)
     { return std::shared_ptr<item>(std::make_shared<DefenceItems>(DefenceItems(name,pret,1,buff_))); }
-    static std::shared_ptr<item>  health_item_(std::string name, int pret, int buff_)
+    static std::shared_ptr<item>  health_item_(const std::string name, int pret, int buff_)
     { return std::shared_ptr<item>(std::make_shared<HealthItems>(HealthItems(name,pret,1,buff_))); }
-    static std::shared_ptr<item>  Special_item_(std::string name, int pret, std::string power)
+    static std::shared_ptr<item>  Special_item_(const std::string name, int pret, const std::string power)
     { return std::shared_ptr<item>(std::make_shared<SpecialItems>(SpecialItems(name,pret,2,power))); }
 };
 
@@ -177,9 +177,9 @@ int main() {
                     if(choicetobuy != "item" ) throw InputError("Player input incorrect");
                     if (choicetobuy == "item") {
                      std::cout << "Which item do you want to buy? (0/1/2)" << std::endl;
-                        int choiceitem;
+                        int choiceitem = 0;
+                        std::cin >> choiceitem;
                         if(choiceitem != 1 && choiceitem != 0 && choiceitem != 2) throw InputError("Player input incorrect");
-                     std::cin >> choiceitem;
                         s.buyItem(choiceitem, os);
                         std::cout<<"Leave shop. (1/0)"<<std::endl;
                      int choiceleave;
@@ -188,6 +188,7 @@ int main() {
                      if(choiceleave == 1)
                         {
                          leave = true;
+                         os.update(p);
                      }
                     }
                 } else {
@@ -204,6 +205,7 @@ int main() {
     else{
         std::cout<<"You don't have enough money or diamonds."<<std::endl;
         std::cout<<"Start the game."<<std::endl;
+
     }
 
         int nrportals = 5;
@@ -259,8 +261,8 @@ int main() {
             std::cout<<"You've died."<<std::endl;
             std::cout<<"Want to play again? (1/0)"<<std::endl;
             int choicee=0;
-            if(choicee != 1 && choicee != 0) throw InputError("Player input incorrect");
             std::cin>>choicee;
+            if(choicee != 1 && choicee != 0) throw InputError("Player input incorrect");
             if(choicee == 1)
                 game = true;
             else
